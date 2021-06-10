@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 TOKEN = os.getenv('BOT_TOKEN')
-PARTICIPANT = os.getenv('CHECKEGE_PARTICIPANT')
+TELEGRAM_USER = os.getenv('TELEGRAM_USER_ID')
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)

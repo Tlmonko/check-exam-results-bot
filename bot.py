@@ -27,7 +27,7 @@ async def ping(msg: types.Message):
 
 
 async def check_page_update():
-    await bot.send_message('Update checking started')
+    await bot.send_message(chat_id=TELEGRAM_USER, text='Update checking started')
     print('Update checking started')
     old_results = {}
     while True:

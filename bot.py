@@ -21,6 +21,11 @@ async def process_start_command(message: types.Message):
     await message.reply('Bot started')
 
 
+@dp.message_handler(lambda msg: msg.text == 'ping')
+async def ping(msg: types.Message):
+    await bot.send_message(msg.from_user.id, 'pong')
+
+
 async def check_page_update():
     old_results = {}
     while True:

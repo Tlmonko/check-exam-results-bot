@@ -29,14 +29,18 @@ async def ping(msg: types.Message):
 async def check_page_update():
     old_results = {}
     while True:
-        print('Getting exams results....')
-        response = requests.get('http://checkege.rustest.ru/api/exam',
-                                cookies={'Participant': PARTICIPANT})
-        results = response.json()['Result']['Exams']
-        if old_results and results != old_results:
-            await bot.send_message(chat_id=TELEGRAM_USER, text='Результаты экзаменов изменились!')
-            print('Results changed')
-        old_results = results
+        try:
+            print('Getting exams results....')
+            response = requests.get('http://checkege.rustest.ru/api/exam',
+                                    cookies={'Participant': PARTICIPANT})
+            results = response.json()['Result']['Exams']
+            if old_results and results != old_results:
+                await bot.send_message(chat_id=TELEGRAM_USER,
+                                       text='Результаты экзаменов изменились!')
+                print('Results changed')
+            old_results = results
+        except Exception as e:
+            await bot.send_message(chat_id=TELEGRAM_USER, text='Error: {}'.format(e))
         await asyncio.sleep(60)
 
 

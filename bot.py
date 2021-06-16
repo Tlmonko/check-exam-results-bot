@@ -36,10 +36,17 @@ async def check_page_update():
             response = requests.get('http://checkege.rustest.ru/api/exam',
                                     cookies={'Participant': PARTICIPANT})
             results = response.json()['Result']['Exams']
+            changed_results = []
+            for result in results:
+                exam_id = result['ExamId']
+                old_exam = next(filter(lambda exam: exam['ExamId'] == exam_id, old_results), None)
+                if old_exam != result:
+                    changed_results.append(result['Subject'])
             if old_results and results != old_results:
                 await bot.send_message(chat_id=TELEGRAM_USER,
-                                       text='Результаты экзаменов изменились!')
-                print('Results changed')
+                                       text='Изменились результаты по предметам: {}'.format(
+                                           ', '.join(changed_results)))
+                print('Results changed', changed_results)
             old_results = results
         except Exception as e:
             await bot.send_message(chat_id=TELEGRAM_USER, text='Error: {}'.format(e))

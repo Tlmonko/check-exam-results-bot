@@ -11,6 +11,7 @@ load_dotenv()
 TOKEN = os.getenv('BOT_TOKEN')
 TELEGRAM_USER = os.getenv('TELEGRAM_USER_ID')
 PARTICIPANT = os.getenv('EXAM_PARTICIPANT')
+SECONDS_TIMEOUT = int(os.getenv('CHECK_RESULT_TIMEOUT'))
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
@@ -75,7 +76,7 @@ async def check_page_update():
         except Exception as e:
             await bot.send_message(chat_id=TELEGRAM_USER,
                                    text='Error in update exam results loop: {}'.format(e))
-        await asyncio.sleep(60)
+        await asyncio.sleep(SECONDS_TIMEOUT)
 
 
 async def start_checking_updates(x):

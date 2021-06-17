@@ -41,8 +41,9 @@ async def check_page_update():
                 exam_id = result['ExamId']
                 old_exam = next(filter(lambda exam: exam['ExamId'] == exam_id, old_results), None)
                 if old_exam != result:
-                    changed_results.append(result['Subject'])
-            if old_results and results != old_results:
+                    if old_exam['StatusName'] != result['StatusName']:
+                        changed_results.append(result['Subject'])
+            if old_results and results != old_results and changed_results:
                 await bot.send_message(chat_id=TELEGRAM_USER,
                                        text='Изменились результаты по предметам: {}'.format(
                                            ', '.join(changed_results)))

@@ -69,7 +69,7 @@ async def check_page_update():
                 await bot.send_message(chat_id=TELEGRAM_USER,
                                        text='Изменились результаты по предметам: {}. Новый статус '
                                             'результата: {}'.format(', '.join(changed_results),
-                                                                    results['StatusName']))
+                                                                    result['StatusName']))
                 print('Results changed', changed_results)
             old_results = results
         except Exception as e:

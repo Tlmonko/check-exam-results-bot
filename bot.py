@@ -40,7 +40,7 @@ async def check_page_update():
             for result in results:
                 exam_id = result['ExamId']
                 old_exam = next(filter(lambda exam: exam['ExamId'] == exam_id, old_results), None)
-                if old_exam != result:
+                if old_exam and old_exam != result:
                     if old_exam['StatusName'] != result['StatusName']:
                         changed_results.append(result['Subject'])
             if old_results and results != old_results and changed_results:

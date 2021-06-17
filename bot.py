@@ -11,7 +11,7 @@ load_dotenv()
 TOKEN = os.getenv('BOT_TOKEN')
 TELEGRAM_USER = os.getenv('TELEGRAM_USER_ID')
 PARTICIPANT = os.getenv('EXAM_PARTICIPANT')
-SECONDS_TIMEOUT = int(os.getenv('CHECK_RESULT_TIMEOUT'))
+SECONDS_TIMEOUT = int(os.getenv('CHECK_RESULT_TIMEOUT_IN_SECONDS'))
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)

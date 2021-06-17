@@ -19,10 +19,11 @@ dp = Dispatcher(bot)
 async def get_last_commit_hash():
     try:
         with open(r'.git/refs/heads/main', 'r') as file:
-            hash = file.read()
-    except:
-        hash = 'HASH NOT FOUND'
-    return hash
+            commit_hash = file.read()
+    except Exception as e:
+        await bot.send_message('Error if function get_last_commit_hash: {}'.format(e))
+        commit_hash = 'HASH NOT FOUND'
+    return commit_hash
 
 
 @dp.message_handler(commands=['start'])
@@ -44,7 +45,7 @@ async def check_page_update():
     while True:
         try:
             print('Getting exams results....')
-            response = requests.get('http://checkege.rustest.ru/api/exam',
+            response = requests.get('https://checkege.rustest.ru/api/exam',
                                     cookies={'Participant': PARTICIPANT})
             results = response.json()['Result']['Exams']
             changed_results = []
@@ -61,7 +62,8 @@ async def check_page_update():
                 print('Results changed', changed_results)
             old_results = results
         except Exception as e:
-            await bot.send_message(chat_id=TELEGRAM_USER, text='Error: {}'.format(e))
+            await bot.send_message(chat_id=TELEGRAM_USER,
+                                   text='Error in update exam results loop: {}'.format(e))
         await asyncio.sleep(60)
 
 

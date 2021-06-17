@@ -36,6 +36,16 @@ async def ping(msg: types.Message):
     await bot.send_message(msg.from_user.id, 'pong')
 
 
+@dp.message_handler(commands=['status'])
+async def get_status(message: types.Message):
+    last_commit_hash = await get_last_commit_hash()
+    tasks = asyncio.all_tasks()
+    await bot.send_message(message.from_user.id,
+                           'Bot is now running. \n\nCoroutine objects:\n`{}` \n\nVersion: {}'.format(
+                               [task.get_coro() for task in tasks], last_commit_hash),
+                           parse_mode='Markdown')
+
+
 async def check_page_update():
     last_commit_hash = await get_last_commit_hash()
     await bot.send_message(chat_id=TELEGRAM_USER,

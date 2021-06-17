@@ -18,7 +18,7 @@ dp = Dispatcher(bot)
 
 async def get_last_commit_hash():
     try:
-        with open(r'.git\refs\heads\main', 'r') as file:
+        with open(r'.git/refs/heads/main', 'r') as file:
             hash = file.read()
     except:
         hash = 'HASH NOT FOUND'

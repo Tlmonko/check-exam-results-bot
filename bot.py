@@ -16,6 +16,15 @@ bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
 
+async def get_last_commit_hash():
+    try:
+        with open(r'.git\refs\heads\main', 'r') as file:
+            hash = file.read()
+    except:
+        hash = 'HASH NOT FOUND'
+    return hash
+
+
 @dp.message_handler(commands=['start'])
 async def process_start_command(message: types.Message):
     await message.reply('Bot started')
@@ -27,7 +36,9 @@ async def ping(msg: types.Message):
 
 
 async def check_page_update():
-    await bot.send_message(chat_id=TELEGRAM_USER, text='Update checking started')
+    last_commit_hash = await get_last_commit_hash()
+    await bot.send_message(chat_id=TELEGRAM_USER,
+                           text='Update checking started on version {}'.format(last_commit_hash))
     print('Update checking started')
     old_results = {}
     while True:

@@ -60,17 +60,19 @@ async def check_page_update():
                                     cookies={'Participant': PARTICIPANT})
             results = response.json()['Result']['Exams']
             changed_results = []
+            new_statuses = []
             for result in results:
                 exam_id = result['ExamId']
                 old_exam = next(filter(lambda exam: exam['ExamId'] == exam_id, old_results), None)
                 if old_exam and old_exam != result:
                     if old_exam['StatusName'] != result['StatusName']:
                         changed_results.append(result['Subject'])
+                        new_statuses.append(result['StatusName'])
             if old_results and results != old_results and changed_results:
                 await bot.send_message(chat_id=TELEGRAM_USER,
-                                       text='Изменились результаты по предметам: {}. Новый статус '
-                                            'результата: {}'.format(', '.join(changed_results),
-                                                                    result['StatusName']))
+                                       text='Изменились результаты по предметам: {}. Новые статусы '
+                                            'результатов: {}'.format(', '.join(changed_results),
+                                                                     ', '.join(new_statuses)))
                 print('Results changed', changed_results)
             old_results = results
         except Exception as e:

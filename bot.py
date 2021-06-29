@@ -1,4 +1,5 @@
 import asyncio
+import logging
 import os
 
 import requests
@@ -13,6 +14,10 @@ TELEGRAM_USER = os.getenv('TELEGRAM_USER_ID')
 PARTICIPANT = os.getenv('EXAM_PARTICIPANT')
 SECONDS_TIMEOUT = int(os.getenv('CHECK_RESULT_TIMEOUT_IN_SECONDS'))
 
+logging.basicConfig(filename='bot.log', encoding='utf-8', level=logging.DEBUG,
+                    format='%(asctime)s %(name)s:%(levelname)s:%(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S')
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
@@ -22,7 +27,7 @@ async def get_last_commit_hash():
         with open(r'.git/refs/heads/main', 'r') as file:
             commit_hash = file.read()
     except Exception as e:
-        await bot.send_message('Error if function get_last_commit_hash: {}'.format(e))
+        logging.error(e)
         commit_hash = 'HASH NOT FOUND'
     return commit_hash
 
@@ -51,6 +56,7 @@ async def check_page_update():
     last_commit_hash = await get_last_commit_hash()
     await bot.send_message(chat_id=TELEGRAM_USER,
                            text='Update checking started on version {}'.format(last_commit_hash))
+    logging.info('Update checking started on version {}'.format(last_commit_hash))
     print('Update checking started')
     old_results = {}
     while True:
@@ -76,8 +82,7 @@ async def check_page_update():
                 print('Results changed', changed_results)
             old_results = results
         except Exception as e:
-            await bot.send_message(chat_id=TELEGRAM_USER,
-                                   text='Error in update exam results loop: {}'.format(e))
+            logging.error(e)
         await asyncio.sleep(SECONDS_TIMEOUT)
 
 

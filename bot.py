@@ -18,6 +18,9 @@ logging.basicConfig(filename='bot.log', encoding='utf-8', level=logging.DEBUG,
                     format='%(asctime)s %(name)s:%(levelname)s:%(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
 
+with open('bot.log', 'w'):
+    pass
+
 bot = Bot(token=TOKEN)
 dp = Dispatcher(bot)
 
